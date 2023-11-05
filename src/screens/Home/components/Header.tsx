@@ -2,15 +2,36 @@ import React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
 import Logo from '../../../assets/logo.png';
 import {headerMock} from '../../../mocks/header';
+import {loadHeader} from '../../../services/loadData';
 
-export function Header() {
-  return (
-    <View style={styles.header}>
-      <Image source={Logo} style={styles.image} />
-      <Text style={styles.welcomeText}>{headerMock.welcome}</Text>
-      <Text style={styles.descriptionText}>{headerMock.description}</Text>
-    </View>
-  );
+class Header extends React.Component {
+  state = {
+    header: {
+      welcome: '',
+      description: '',
+    },
+  };
+
+  updateHeader() {
+    const resp = loadHeader();
+    this.setState({header: resp});
+  }
+
+  componentDidMount(): void {
+    this.updateHeader();
+  }
+
+  render() {
+    return (
+      <View style={styles.header}>
+        <Image source={Logo} style={styles.image} />
+        <Text style={styles.welcomeText}>{this.state.header.welcome}</Text>
+        <Text style={styles.descriptionText}>
+          {this.state.header.description}
+        </Text>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -33,3 +54,5 @@ const styles = StyleSheet.create({
     lineHeight: 26,
   },
 });
+
+export {Header};
