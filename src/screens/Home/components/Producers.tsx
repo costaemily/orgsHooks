@@ -1,36 +1,20 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {FlatList, StyleSheet, Text} from 'react-native';
-import {loadProducers} from '../../../services/loadData';
 import {Card} from './Card';
+import {useProducers} from '../../../hooks/useProducers';
 
 export function Producers({header: Header}) {
-  //it is always set at the beginning of the function
-  const [title, setTitle] = useState('');
-  const [list, setList] = useState([]);
-  /*
-    it is used as the component did mount function with no values in the array
-    executing a function passed as the first argument only when the component is created
-   */
-  useEffect(() => {
-    const resp = loadProducers();
-    setTitle(resp.title);
-    setList(resp.list);
-    //console.log(resp);
-  }, []);
-
-  const HeaderList = () => {
-    return (
-      <>
-        <Header />
-        <Text style={styles.title}>{title}</Text>
-      </>
-    );
-  };
+  const [title, list] = useProducers();
 
   return (
     <FlatList
       data={list}
-      ListHeaderComponent={HeaderList}
+      ListHeaderComponent={
+        <>
+          <Header />
+          <Text style={styles.title}>{title}</Text>
+        </>
+      }
       renderItem={({item}) => <Card {...item} />}
       keyExtractor={({name}) => name}
     />
