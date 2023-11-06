@@ -1,9 +1,16 @@
-import React, {useReducer, useState} from 'react';
+import React, {useMemo, useReducer, useState} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Stars} from '../../../components/Stars';
 
+const metersDistance = distance => {
+  console.log('distancia em metros');
+  return `${distance}m`;
+};
+
 export function Card({name, image, distance, stars}) {
   const [selected, invertSelected] = useReducer(selected => !selected, false);
+
+  const distanceText = useMemo(() => metersDistance(distance), [distance]);
 
   return (
     <TouchableOpacity style={styles.card} onPress={invertSelected}>
@@ -13,8 +20,7 @@ export function Card({name, image, distance, stars}) {
           <Text style={styles.name}>{name}</Text>
           <Stars quantity={stars} editable={selected} large={selected} />
         </View>
-
-        <Text style={styles.distance}>{distance}</Text>
+        <Text style={styles.distance}>{distanceText}</Text>
       </View>
     </TouchableOpacity>
   );
